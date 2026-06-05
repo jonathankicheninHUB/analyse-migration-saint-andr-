@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse Socio-Électorale : Saint-André & Saint-Denis</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased">
+
+    <!-- Navigation Banner -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
+                    <i data-lucide="line-chart" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">Réunion Éco-Polis</span>
+                    <span class="hidden sm:inline text-xs text-slate-400 ml-2 border-l border-slate-700 pl-2">Observatoire Macro-Électoral</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-xs bg-slate-800 text-slate-300 px-3 py-1.5 rounded-full font-medium flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Données Insee 2026 actives
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        
+        <!-- Hero Section / Context -->
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 md:p-8 border border-slate-800 relative overflow-hidden shadow-xl">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl -z-10"></div>
+            <div class="absolute bottom-0 left-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl -z-10"></div>
+            
+            <div class="max-w-3xl">
+                <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full">Modélisation Prédictive & Sociologie</span>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-white mt-4 mb-3 tracking-tight">
+                    Comment la crise du logement dans le Nord fragilise la dynastie Virapoullé
+                </h1>
+                <p class="text-slate-300 text-base md:text-lg leading-relaxed">
+                    Cette plateforme interactive valide l'hypothèse macro-sociologique d'un effet domino à La Réunion. En ajustant les curseurs économiques de Saint-Denis, observez l'impact direct sur les flux d'habitants et la dilution électorale du clan Virapoullé à Saint-André.
+                </p>
+            </div>
+        </div>
+
+        <!-- Key Metrics Dashboard / Dynamic Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Metric 1 -->
+            <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 hover:border-emerald-500/30 transition-all">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-slate-400 uppercase">Flux annuel d'arrivées</span>
+                    <div class="p-1.5 bg-emerald-500/10 rounded text-emerald-400"><i data-lucide="users" class="w-4 h-4"></i></div>
+                </div>
+                <div class="text-2xl font-bold text-white mb-1" id="kpi-flux-annuel">2 200</div>
+                <p class="text-xs text-slate-400">Nouveaux résidents arrivant à Saint-André par an.</p>
+            </div>
+            <!-- Metric 2 -->
+            <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 hover:border-emerald-500/30 transition-all">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-slate-400 uppercase">Mal-inscrits ("Fantômes")</span>
+                    <div class="p-1.5 bg-amber-500/10 rounded text-amber-400"><i data-lucide="user-minus" class="w-4 h-4"></i></div>
+                </div>
+                <div class="text-2xl font-bold text-white mb-1" id="kpi-mal-inscrits">16.5%</div>
+                <p class="text-xs text-slate-400">Restent inscrits dans leur ancienne commune de l'Est/Nord.</p>
+            </div>
+            <!-- Metric 3 -->
+            <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 hover:border-emerald-500/30 transition-all">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-slate-400 uppercase">Arrivées cumulées (Mandat)</span>
+                    <div class="p-1.5 bg-blue-500/10 rounded text-blue-400"><i data-lucide="calendar" class="w-4 h-4"></i></div>
+                </div>
+                <div class="text-2xl font-bold text-white mb-1" id="kpi-cumul-mandat">13 200</div>
+                <p class="text-xs text-slate-400">Nouveaux arrivants sur un mandat complet de 6 ans.</p>
+            </div>
+            <!-- Metric 4 -->
+            <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 hover:border-emerald-500/30 transition-all">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-slate-400 uppercase">Érosion Estimée (Baseline)</span>
+                    <div class="p-1.5 bg-rose-500/10 rounded text-rose-400"><i data-lucide="trending-down" class="w-4 h-4"></i></div>
+                </div>
+                <div class="text-2xl font-bold text-white mb-1" id="kpi-erosion">-12.4%</div>
+                <p class="text-xs text-slate-400">Diminution estimée du bassin de vote dynastique.</p>
+            </div>
+        </div>
+
+        <!-- Simulation Panel -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Inputs Panel (Sliders) -->
+            <div class="bg-slate-800/40 p-6 rounded-xl border border-slate-800 space-y-6 lg:col-span-1">
+                <div class="flex items-center gap-2 mb-2">
+                    <i data-lucide="sliders" class="w-5 h-5 text-emerald-400"></i>
+                    <h2 class="text-lg font-bold text-white">Curseurs de Conjoncture</h2>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed mb-4">
+                    Modifiez les paramètres économiques de la micro-région Nord pour observer en temps réel la réaction sociologique à Saint-André.
+                </p>
+
+                <!-- Slider 1 -->
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs font-medium">
+                        <span class="text-slate-300">Croissance Éco. du Nord (PIB)</span>
+                        <span class="text-emerald-400 font-bold" id="val-pib">3.2% /an</span>
+                    </div>
+                    <input type="range" id="slider-pib" min="0.5" max="6" step="0.1" value="3.2" 
+                        class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                    <p class="text-[10px] text-slate-500">Augmente la tension sur l'emploi à Saint-Denis & Sainte-Marie.</p>
+                </div>
+
+                <!-- Slider 2 -->
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs font-medium">
+                        <span class="text-slate-300">Inflation Immobilière (St-Denis)</span>
+                        <span class="text-emerald-400 font-bold" id="val-inflation">7.5% /an</span>
+                    </div>
+                    <input type="range" id="slider-inflation" min="2" max="15" step="0.5" value="7.5" 
+                        class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                    <p class="text-[10px] text-slate-500">Force centrifuge qui pousse les classes moyennes vers l'Est.</p>
+                </div>
+
+                <!-- Slider 3 -->
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs font-medium">
+                        <span class="text-slate-300">Différentiel Foncier (St-André)</span>
+                        <span class="text-emerald-400 font-bold" id="val-differentiel">-35%</span>
+                    </div>
+                    <input type="range" id="slider-differentiel" min="-50" max="-10" step="1" value="-35" 
+                        class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                    <p class="text-[10px] text-slate-500">Écart de prix au m² par rapport au chef-lieu (attractivité d'achat).</p>
+                </div>
+
+                <!-- Slider 4 -->
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs font-medium">
+                        <span class="text-slate-300">Taux d'Inertie Électorale (Mal-inscription)</span>
+                        <span class="text-emerald-400 font-bold" id="val-inertie">25%</span>
+                    </div>
+                    <input type="range" id="slider-inertie" min="10" max="50" step="1" value="25" 
+                        class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                    <p class="text-[10px] text-slate-500">Part d'habitants de Saint-André qui restent inscrits là où ils travaillent.</p>
+                </div>
+
+                <div class="pt-4 border-t border-slate-700/50 flex justify-between">
+                    <button id="btn-reset" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-2 px-4 rounded transition">
+                        Réinitialiser
+                    </button>
+                    <a href="#rapport-section" class="text-xs bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2 px-4 rounded transition flex items-center gap-1">
+                        Générer Note <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Graphs / Charts Display Panel -->
+            <div class="bg-slate-800/40 p-6 rounded-xl border border-slate-800 lg:col-span-2 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="trending-up" class="w-5 h-5 text-emerald-400"></i>
+                            <h2 class="text-lg font-bold text-white">Trajectoire & Projection sur 10 ans</h2>
+                        </div>
+                        <span class="text-xs text-slate-400">Scénario de dilution</span>
+                    </div>
+                    <p class="text-xs text-slate-300 mb-6">
+                        Le graphique ci-dessous montre la corrélation directe entre la hausse du flux migratoire provoqué par la pression foncière de Saint-Denis, et la baisse de la part du vote captif historique (traditionnel Virapoullé).
+                    </p>
+                </div>
+                
+                <div class="relative w-full h-72 md:h-80 flex items-center justify-center">
+                    <canvas id="projectionChart"></canvas>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mt-6 pt-4 border-t border-slate-700/50 text-xs">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-emerald-400 rounded-full"></div>
+                        <span class="text-slate-400">Nouveaux arrivants à Saint-André</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-rose-500 rounded-full"></div>
+                        <span class="text-slate-400">Base Électorale du Clan Virapoullé (%)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demographic Equation Explainer Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Box 1: Insee Balance -->
+            <div class="bg-slate-800/30 p-6 rounded-xl border border-slate-800 space-y-4">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="scale" class="w-5 h-5 text-blue-400"></i>
+                    <h3 class="text-base font-bold text-white">L'Équilibre Démographique de Saint-André</h3>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Selon l'Insee, la croissance brute annuelle de Saint-André est positive (+0,6% par an), mais cette stabilité apparente masque un <strong>phénomène de remplacement silencieux</strong>. Le solde migratoire négatif prouve qu'une grande part de la population historique s'en va, tandis qu'une population active entièrement externe prend sa place.
+                </p>
+                <div class="bg-slate-900 p-4 rounded-lg space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-slate-400">Moteur Interne (Solde Naturel)</span>
+                        <span class="text-xs font-bold text-blue-400">+690 hab/an</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-1.5">
+                        <div class="bg-blue-400 h-1.5 rounded-full" style="width: 70%"></div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-slate-400">Moteur Externe (Flux de Remplacement)</span>
+                        <span class="text-xs font-bold text-emerald-400" id="stat-flux-externe">+2 200 hab/an</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-1.5">
+                        <div class="bg-emerald-400 h-1.5 rounded-full" id="bar-flux-externe" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Box 2: Mal-Inscription & Phantom Voters -->
+            <div class="bg-slate-800/30 p-6 rounded-xl border border-slate-800 space-y-4">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="shield-alert" class="w-5 h-5 text-amber-400"></i>
+                    <h3 class="text-base font-bold text-white">Le Phénomène de l'Électeur Fantôme</h3>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    La <strong>mal-inscription électorale</strong> d'environ 15% à 35% sur les jeunes actifs signifie qu'une portion non négligeable des nouveaux résidents ne pèse pas immédiatement dans le jeu politique de Saint-André. Ils dorment et vivent à Saint-André mais votent encore là où ils travaillent (Saint-Denis).
+                </p>
+                <div class="bg-slate-900 p-4 rounded-lg border border-slate-700/30">
+                    <p class="text-xs text-slate-400 mb-2">Impact Direct calculé sur l'élection locale :</p>
+                    <div class="flex items-center justify-between text-xs text-slate-300 font-semibold">
+                        <span>Électeurs immédiatement inscrits à St-André</span>
+                        <span class="text-emerald-400" id="calc-inscrits">1 650 /an</span>
+                    </div>
+                    <div class="flex items-center justify-between text-xs text-slate-400 mt-2">
+                        <span>Électeurs restant inactifs/mal-inscrits</span>
+                        <span class="text-amber-400" id="calc-malinscrits">550 /an</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auto Generated Note / Summary -->
+        <div id="rapport-section" class="bg-slate-800/30 rounded-xl border border-slate-800 overflow-hidden shadow-lg">
+            <div class="bg-slate-800 p-4 border-b border-slate-700 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="file-text" class="w-5 h-5 text-emerald-400"></i>
+                    <h3 class="text-base font-bold text-white">Rapport d'Analyse Synthétique</h3>
+                </div>
+                <button id="btn-copy" class="text-xs bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-1.5 px-3 rounded flex items-center gap-1.5 transition">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copier la Note
+                </button>
+            </div>
+            <div class="p-6 md:p-8 space-y-6">
+                <div id="text-report" class="text-slate-300 text-sm leading-relaxed space-y-4">
+                    <!-- Dynamic text will be injected here via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-8 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>© 2026 Réunion Éco-Polis. Projet d'analyse électorale et démographique basé sur les modèles Insee de la région Est.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // DOM Elements
+        const sliderPib = document.getElementById('slider-pib');
+        const sliderInflation = document.getElementById('slider-inflation');
+        const sliderDifferentiel = document.getElementById('slider-differentiel');
+        const sliderInertie = document.getElementById('slider-inertie');
+
+        const valPib = document.getElementById('val-pib');
+        const valInflation = document.getElementById('val-inflation');
+        const valDifferentiel = document.getElementById('val-differentiel');
+        const valInertie = document.getElementById('val-inertie');
+
+        // KPIs
+        const kpiFluxAnnuel = document.getElementById('kpi-flux-annuel');
+        const kpiMalInscrits = document.getElementById('kpi-mal-inscrits');
+        const kpiCumulMandat = document.getElementById('kpi-cumul-mandat');
+        const kpiErosion = document.getElementById('kpi-erosion');
+
+        const statFluxExterne = document.getElementById('stat-flux-externe');
+        const barFluxExterne = document.getElementById('bar-flux-externe');
+        const calcInscrits = document.getElementById('calc-inscrits');
+        const calcMalinscrits = document.getElementById('calc-malinscrits');
+        const textReport = document.getElementById('text-report');
+        const btnReset = document.getElementById('btn-reset');
+        const btnCopy = document.getElementById('btn-copy');
+
+        let myChart;
+
+        // Core Formula Logic
+        function updateModel() {
+            const pib = parseFloat(sliderPib.value);
+            const inflation = parseFloat(sliderInflation.value);
+            const differentiel = Math.abs(parseFloat(sliderDifferentiel.value));
+            const inertie = parseFloat(sliderInertie.value);
+
+            // Update label texts
+            valPib.textContent = `${pib}% /an`;
+            valInflation.textContent = `${inflation}% /an`;
+            valDifferentiel.textContent = `-${differentiel}%`;
+            valInertie.textContent = `${inertie}%`;
+
+            // Calculate demographic impact
+            // Base arrival is 1200. Every unit of inflation and differential scales this.
+            const fluxAnnuel = Math.round(1000 + (inflation * 120) * (differentiel / 25) * (1 + (pib / 10)));
+            const malInscritsCount = Math.round(fluxAnnuel * (inertie / 100));
+            const inscritsCount = fluxAnnuel - malInscritsCount;
+            const cumulMandat = fluxAnnuel * 6;
+
+            // Political erosion calculation
+            // Base erosion scales with the number of newly added registered voters vs standard electorate pool
+            const baseElectorate = 38000;
+            const accumulatedNewVoters = inscritsCount * 6;
+            const erosionPercent = ((accumulatedNewVoters / baseElectorate) * 100).toFixed(1);
+
+            // Update KPI cards
+            kpiFluxAnnuel.textContent = fluxAnnuel.toLocaleString('fr-FR');
+            kpiMalInscrits.textContent = `${inertie}%`;
+            kpiCumulMandat.textContent = cumulMandat.toLocaleString('fr-FR');
+            kpiErosion.textContent = `-${erosionPercent}%`;
+
+            // Update stats
+            statFluxExterne.textContent = `+${fluxAnnuel.toLocaleString('fr-FR')} hab/an`;
+            // cap width percentage
+            const barWidth = Math.min(100, Math.max(20, (fluxAnnuel / 3500) * 100));
+            barFluxExterne.style.width = `${barWidth}%`;
+
+            calcInscrits.textContent = `${inscritsCount.toLocaleString('fr-FR')} /an`;
+            calcMalinscrits.textContent = `${malInscritsCount.toLocaleString('fr-FR')} /an`;
+
+            // Generate report text
+            generateDynamicReport(pib, inflation, differentiel, inertie, fluxAnnuel, cumulMandat, erosionPercent);
+
+            // Update Chart
+            updateChartData(fluxAnnuel, parseFloat(erosionPercent));
+        }
+
+        function generateDynamicReport(pib, inflation, differentiel, inertie, fluxAnnuel, cumulMandat, erosionPercent) {
+            textReport.innerHTML = `
+                <p class="text-slate-400 font-semibold text-xs uppercase tracking-wider">Note Macro-Politique de Synthèse</p>
+                <h4 class="text-lg font-bold text-white mt-1">Analyse de la transition électorale à Saint-André</h4>
+                <p>
+                    Le modèle de simulation basé sur une croissance économique de la région Nord de <strong>${pib}% par an</strong> et une hausse du coût de l'immobilier à Saint-Denis de <strong>${inflation}% par an</strong> montre l'émergence d'une puissante vague d'exode résidentiel. 
+                    Le différentiel foncier attractif de Saint-André (<strong>-${differentiel}%</strong>) agit comme un aimant auprès des classes moyennes.
+                </p>
+                <p>
+                    Ce phénomène génère un flux d'arrivée brute estimé à <strong>${fluxAnnuel.toLocaleString('fr-FR')} nouveaux résidents par an</strong> sur le territoire de Saint-André. Sur la durée d'un mandat municipal (6 ans), ce sont <strong>${cumulMandat.toLocaleString('fr-FR')} personnes</strong> qui s'installent à Saint-André.
+                </p>
+                <div class="bg-slate-900 p-4 rounded border border-slate-700/50 my-4 space-y-2">
+                    <p class="font-bold text-emerald-400">Le levier de dilution électorale :</p>
+                    <p class="text-xs">
+                        Bien que le taux d'inertie administrative (la mal-inscription) soit de <strong>${inertie}%</strong>, environ <strong>${Math.round(fluxAnnuel * (1 - inertie/100)).toLocaleString('fr-FR')} nouveaux inscrits</strong> entrent chaque année dans les listes électorales de Saint-André. Ces électeurs "urbains" mobiles, sans allégeance historique au modèle clientéliste de Jean-Paul Virapoullé, provoquent une érosion structurelle de l'ordre de <strong>-${erosionPercent}%</strong> de la capacité de mobilisation dynastique traditionnelle.
+                    </p>
+                </div>
+                <p>
+                    <strong>En conclusion :</strong> Les recours juridiques ou tactiques de recomposition interne à l'ancienne droite ne peuvent contrer ce phénomène physique d'importation d'un électorat moderne, déconnecté des réseaux clientélaires historiques. Saint-André a achevé sa mue sociologique.
+                </p>
+            `;
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('projectionChart').getContext('2d');
+            
+            // Build 10-year datasets
+            const years = Array.from({length: 10}, (_, i) => 2026 + i);
+            
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [
+                        {
+                            label: 'Flux Annuel de Travailleurs',
+                            data: [],
+                            borderColor: '#34d399', // Emerald
+                            backgroundColor: 'rgba(52, 211, 153, 0.1)',
+                            yAxisID: 'y',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Base Virapoullé (%)',
+                            data: [],
+                            borderColor: '#f43f5e', // Rose
+                            backgroundColor: 'transparent',
+                            yAxisID: 'y1',
+                            tension: 0.3,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: '#34d399'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Flux d\'arrivants (An)',
+                                color: '#34d399'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false // avoid overlaying grid lines
+                            },
+                            ticks: {
+                                color: '#f43f5e'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Part d\'influence (%)',
+                                color: '#f43f5e'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChartData(fluxBase, erosionPercent) {
+            if (!myChart) return;
+
+            const yearsCount = 10;
+            const fluxData = [];
+            const erosionData = [];
+
+            // Simulation over 10 years
+            let currentVoterInfluence = 50.0; // Start at ~50% historic pool
+            
+            for (let i = 0; i < yearsCount; i++) {
+                // Growth rate of the flow due to compound effect
+                const currentFlux = Math.round(fluxBase * (1 + (i * 0.03)));
+                fluxData.push(currentFlux);
+
+                // Erosion compounding
+                currentVoterInfluence = Math.max(10, currentVoterInfluence - (erosionPercent / 6));
+                erosionData.push(currentVoterInfluence.toFixed(1));
+            }
+
+            myChart.data.datasets[0].data = fluxData;
+            myChart.data.datasets[1].data = erosionData;
+            myChart.update();
+        }
+
+        // Event listeners for inputs
+        [sliderPib, sliderInflation, sliderDifferentiel, sliderInertie].forEach(slider => {
+            slider.addEventListener('input', updateModel);
+        });
+
+        // Reset to default values
+        btnReset.addEventListener('click', () => {
+            sliderPib.value = 3.2;
+            sliderInflation.value = 7.5;
+            sliderDifferentiel.value = -35;
+            sliderInertie.value = 25;
+            updateModel();
+        });
+
+        // Copy note to clipboard with traditional fallback
+        btnCopy.addEventListener('click', () => {
+            const range = document.createRange();
+            range.selectNode(textReport);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            try {
+                document.execCommand('copy');
+                const originalText = btnCopy.innerHTML;
+                btnCopy.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i> Copié !`;
+                lucide.createIcons();
+                setTimeout(() => {
+                    btnCopy.innerHTML = originalText;
+                    lucide.createIcons();
+                }, 2000);
+            } catch (err) {
+                console.error("Impossible de copier", err);
+            }
+            window.getSelection().removeAllRanges();
+        });
+
+        // Start App on Load
+        window.onload = function() {
+            lucide.createIcons();
+            initChart();
+            updateModel();
+        }
+    </script>
+</body>
+</html>
